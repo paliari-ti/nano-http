@@ -1,0 +1,22 @@
+{
+    "name": "paliari/nano-http",
+    "version": "0.0.1",
+    "description": "nano http",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marcos Paliari",
+            "email": "marcos@paliari.com.br"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Paliari\\NanoHttp\\": "src"
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "paliari/php-utils": "^1.1"
+    }
+}
