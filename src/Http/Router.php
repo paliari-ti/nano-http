@@ -49,7 +49,7 @@ class Router
 
     public function run(Request $request, Response $response)
     {
-        $run = $this->getRunWithMiddleware($request, $response);
+        $run = $this->getRunWithMiddleware($request->getPath());
 
         return $run($request, $response);
     }
@@ -78,26 +78,36 @@ class Router
     }
 
     /**
-     * @param Request  $request A request object
-     * @param Response $response A response object
+     * @param string $path
      *
      * @return callable
      */
-    protected function getRunWithMiddleware(Request $request, Response $response)
+    protected function getRunWithMiddleware($path)
     {
         $next = $this;
-        foreach ($this->getMiddlewareOfRun($request->getPath()) as $callable) {
-            $next = function (Request $request, Response $response) use ($callable, $next) {
-                $result = call_user_func($callable, $request, $response, $next);
-                if (!$result instanceof Response) {
-                    throw new DomainException('Middleware must return instance of Response!');
-                }
-
-                return $result;
-            };
+        foreach ($this->getMiddlewareOfRun($path) as $callable) {
+            $next = $this->createMiddlewareNextRun($callable, $next);
         }
 
         return $next;
+    }
+
+    /**
+     * @param callable $callable
+     * @param callable $next
+     *
+     * @return callable
+     */
+    protected function createMiddlewareNextRun($callable, $next)
+    {
+        return function (Request $request, Response $response) use ($callable, $next) {
+            $result = call_user_func($callable, $request, $response, $next);
+            if (!$result instanceof Response) {
+                throw new DomainException('Middleware must return instance of Response!');
+            }
+
+            return $result;
+        };
     }
 
     /**
