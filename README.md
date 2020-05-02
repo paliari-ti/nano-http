@@ -67,6 +67,9 @@ class AuthMiddleware implements \Paliari\NanoHttp\Middleware\MiddlewareInterface
     public function __invoke($request, $response, $next)
     {
         // TODO: Implement __invoke() method.
+        // ...
+
+        return $response;
     }
 }
 
