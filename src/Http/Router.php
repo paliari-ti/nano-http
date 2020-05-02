@@ -6,7 +6,7 @@ use DomainException;
 use Paliari\Utils\A;
 use Paliari\Utils\Http\Request;
 
-class Route
+class Router
 {
     protected $routes      = [];
     protected $_middleware = [];

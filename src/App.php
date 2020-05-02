@@ -4,7 +4,7 @@ namespace Paliari\NanoHttp;
 
 use Exception;
 use Paliari\NanoHttp\Http\Response;
-use Paliari\NanoHttp\Http\Route;
+use Paliari\NanoHttp\Http\Router;
 use Paliari\Utils\Http\Request;
 
 class App
@@ -20,9 +20,9 @@ class App
     protected $response;
 
     /**
-     * @var Route
+     * @var Router
      */
-    protected $route;
+    protected $router;
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class App
         }
         $this->response = new Response();
         $this->request  = new Request();
-        $this->route    = new Route();
+        $this->router   = new Router();
     }
 
     /**
@@ -50,7 +50,7 @@ class App
      */
     public function add($callable, $route = '/')
     {
-        $this->route->add($callable, $route);
+        $this->router->add($callable, $route);
 
         return $this;
     }
@@ -64,7 +64,7 @@ class App
      */
     public function map($method, $route, $callable)
     {
-        $this->route->map($method, $route, $callable);
+        $this->router->map($method, $route, $callable);
 
         return $this;
     }
@@ -137,7 +137,7 @@ class App
     public function run()
     {
         try {
-            $this->response = $this->route->run($this->request, $this->response);
+            $this->response = $this->router->run($this->request, $this->response);
         } catch (Exception $e) {
             if (200 == $this->response->code) {
                 $this->response->code = 409;
